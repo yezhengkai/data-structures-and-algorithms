@@ -1,6 +1,19 @@
 # Data Structures and Algorithms
 Use different programming languages ​​to implement data structures and algorithms as exercises.
 
+## Test
+Run tests with `./runtests.sh LANGUAGE...`.
+For example:
+```bash
+./runtests.sh jl
+```
+```bash
+./runtests.sh jl py
+```
+```bash
+./runtests.sh all
+```
+
 ## References
 - [Hello 算法](https://www.hello-algo.com/)
 - [The Algorithms](https://the-algorithms.com/)
