@@ -1,5 +1,3 @@
-
-
 abstract type AbstractLinkedList{T} end
 abstract type AbstractListNode{T} end
 
@@ -38,3 +36,22 @@ function SinglyListNode(data, next::SinglyListNode{T}) where T
     return SinglyListNode{T}(data, next)
 end
 # ===== Singly linked list node |> End =====
+
+# ===== Singly linked list |> Start =====
+mutable struct SinglyLinkedList{T} <: AbstractLinkedList{T}
+    len::Int
+    head::SinglyListNode{T}  # point to head node
+
+    # Inner Constructor
+    function SinglyLinkedList{T}() where T
+        list = new{T}()
+        list.len = 0
+        list.head = SinglyListNode{T}()
+        return list
+    end
+end
+
+function SinglyLinkedList()
+    return SinglyLinkedList{Any}()
+end
+# ===== Singly linked list |> End =====
