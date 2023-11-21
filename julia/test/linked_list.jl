@@ -22,4 +22,26 @@ end
 @testset "Singly Linked List" begin
   @test_nowarn SinglyLinkedList{Int}()
   @test_nowarn SinglyLinkedList()
+  @test SinglyLinkedList().len == 0
+
+  list = SinglyLinkedList{Int}(1)
+  @test length(list) == 1
+  @test list.head == list.tail
+  @test list.head.data == list.tail.data == 1
+
+  @test length(push!(list, 2)) == 2
+  @test list.head != list.tail
+  @test list.head.data == 1
+  @test list.tail.data == 2
+
+  @test length(push!(list, 3, 4)) == 4
+  @test list.head != list.tail
+  @test list.head.data == 1
+  @test list.tail.data == 4
+
+  @test length(append!(list, [5, 6])) == 6
+  @test list.head != list.tail
+  @test list.head.data == 1
+  @test list.tail.data == 6
+
 end
