@@ -1,7 +1,7 @@
 abstract type AbstractLinkedList{T} end
 abstract type AbstractListNode{T} end
 
-# ===== Singly linked list node |> Start =====
+# >> start singly linked list node <<
 # https://stackoverflow.com/questions/76161659/why-is-no-explicit-reference-required-in-this-linked-list
 mutable struct SinglyListNode{T} <: AbstractListNode{T}
     # Field
@@ -35,9 +35,9 @@ end
 function SinglyListNode(data, next::SinglyListNode{T}) where T
     return SinglyListNode{T}(data, next)
 end
-# ===== Singly linked list node |> End =====
+# >> end singly linked list node <<
 
-# ===== Singly linked list |> Start =====
+# >> start singly linked list <<
 mutable struct SinglyLinkedList{T} <: AbstractLinkedList{T}
     len::Int
     head::SinglyListNode{T}  # point to head node
@@ -54,4 +54,4 @@ end
 function SinglyLinkedList()
     return SinglyLinkedList{Any}()
 end
-# ===== Singly linked list |> End =====
+# >> end singly linked list <<
