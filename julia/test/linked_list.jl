@@ -20,28 +20,41 @@
 end
 
 @testset "Singly Linked List" begin
+    # Construct
     @test_nowarn SinglyLinkedList{Int}()
     @test_nowarn SinglyLinkedList()
     @test SinglyLinkedList().len == 0
-
-    list = SinglyLinkedList{Int}(1)
-    @test length(list) == 1
+    list = @test_nowarn SinglyLinkedList{Int}(1)
     @test list.head == list.tail
     @test list.head.data == list.tail.data == 1
 
+    # Insert to tail
     @test length(push!(list, 2)) == 2
     @test list.head != list.tail
     @test list.head.data == 1
     @test list.tail.data == 2
-
     @test length(push!(list, 3, 4)) == 4
     @test list.head != list.tail
     @test list.head.data == 1
     @test list.tail.data == 4
-
     @test length(append!(list, [5, 6])) == 6
     @test list.head != list.tail
     @test list.head.data == 1
     @test list.tail.data == 6
+    @test length(append!(list, [7], [8, 9])) == 9
+    @test list.head != list.tail
+    @test list.head.data == 1
+    @test list.tail.data == 9
 
+    # Insert to head
+    list = SinglyLinkedList{Int}()
+    @test length(pushfirst!(list, 1)) == 1
+    @test list.head.data == list.tail.data == 1
+    @test length(pushfirst!(list, 2)) == 2
+    @test list.head != list.tail
+    @test list.head.data == 2
+    @test list.tail.data == 1
+    # TODO: add tests
+
+    # Insert to ith
 end
