@@ -9,18 +9,18 @@ mutable struct SinglyListNode{T} <: AbstractListNode{T}
     next::SinglyListNode{T}  # next node
 
     # Inner Constructor
-    function SinglyListNode{T}() where T
+    function SinglyListNode{T}() where {T}
         # The following syntax is incomplete initialization. (ref: https://docs.julialang.org/en/v1/manual/constructors/#Incomplete-Initialization)
         node = new{T}()
         node.next = node  # circular reference.
         return node
     end
-    function SinglyListNode{T}(data) where T
+    function SinglyListNode{T}(data) where {T}
         node = new{T}(data)  # Now node.next is undefined. So if you access node.next you will get `ERROR: UndefRefError: access to undefined reference`
         node.next = node  # circular reference.
         return node
     end
-    function SinglyListNode{T}(data::T, next::SinglyListNode{T}) where T
+    function SinglyListNode{T}(data::T, next::SinglyListNode{T}) where {T}
         new{T}(data, next)
     end
 end
@@ -32,7 +32,7 @@ end
 function SinglyListNode(data)
     return SinglyListNode{typeof(data)}(data)
 end
-function SinglyListNode(data, next::SinglyListNode{T}) where T
+function SinglyListNode(data, next::SinglyListNode{T}) where {T}
     return SinglyListNode{T}(data, next)
 end
 # >> end singly linked list node <<
@@ -44,7 +44,7 @@ mutable struct SinglyLinkedList{T} <: AbstractLinkedList{T}
     tail::SinglyListNode{T}  # tail node
 
     # Inner Constructor
-    function SinglyLinkedList{T}() where T
+    function SinglyLinkedList{T}() where {T}
         list = new{T}()
         list.len = 0
         list.head = list.tail = SinglyListNode{T}()  # head node and tail node are the same
@@ -57,7 +57,7 @@ function SinglyLinkedList()
     return SinglyLinkedList{Any}()
 end
 
-function SinglyLinkedList{T}(elements...) where T
+function SinglyLinkedList{T}(elements...) where {T}
     list = SinglyLinkedList{T}()
     for element in elements
         push!(list, element)
@@ -96,7 +96,7 @@ end
 #       next = iterate(iter, state)
 #   end
 Base.length(list::AbstractLinkedList) = list.len
-Base.eltype(::AbstractLinkedList{T}) where T = T
+Base.eltype(::AbstractLinkedList{T}) where {T} = T
 function Base.isdone(::AbstractLinkedList, node::AbstractListNode)
     return node == node.next
 end
@@ -108,22 +108,58 @@ function Base.iterate(list::AbstractLinkedList, node::AbstractListNode=list.head
         return (node.data, node.next)
     end
 end
+# TODO reverse order
 # >> end iteration interface <<
 
-function Base.push!(list::AbstractLinkedList{T}, item) where T
+# >> start insert to tail <<
+function Base.push!(list::SinglyLinkedList{T}, item) where {T}
     list.tail.next.data = item
     list.tail = list.tail.next
     list.tail.next = SinglyListNode{T}()
     list.len += 1
     return list
 end
-function Base.push!(list::AbstractLinkedList, item...)
-    return Base.append!(list, item)
+function Base.push!(list::AbstractLinkedList, items...)
+    return Base.append!(list, items)
 end
 
-function Base.append!(list::AbstractLinkedList, items)
-    for item in items
+function Base.append!(list::AbstractLinkedList, collection)
+    for item in collection
         push!(list, item)
     end
     return list
 end
+function Base.append!(list::AbstractLinkedList, collections...)
+    for collection in collections
+        append!(list, collection)
+    end
+    return list
+end
+# >> end insert to tail <<
+
+# >> start insert to head <<
+function Base.pushfirst!(list::SinglyLinkedList{T}, item) where {T}
+    list.head = SinglyListNode{T}(item, list.head)
+    if list.len == 0
+        list.tail = list.head
+    end
+    list.len += 1
+    return list
+end
+function Base.pushfirst!(list::AbstractLinkedList, items...)
+    return Base.prepend!(list, items)
+end
+
+function Base.prepend!(list::AbstractLinkedList, collection)
+    for item in Iterators.reverse(collection)
+        pushfirst!(list, item)
+    end
+    return list
+end
+function Base.prepend!(list::AbstractLinkedList, collections...)
+    for collection in Iterators.reverse(collections)
+        prepend!(list, collection)
+    end
+    return list
+end
+# >> end insert to head <<
