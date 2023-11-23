@@ -54,7 +54,19 @@ end
     @test list.head != list.tail
     @test list.head.data == 2
     @test list.tail.data == 1
-    # TODO: add tests
+    @test length(pushfirst!(list, 4, 3)) == 4
+    @test list.head != list.tail
+    @test list.head.data == 4
+    @test list.tail.data == 1
+    @test length(prepend!(list, [6, 5])) == 6
+    @test list.head != list.tail
+    @test list.head.data == 6
+    @test list.tail.data == 1
+    @test length(prepend!(list, [9], [8, 7])) == 9
+    @test list.head != list.tail
+    @test list.head.data == 9
+    @test list.tail.data == 1
 
     # Insert to ith
+
 end
