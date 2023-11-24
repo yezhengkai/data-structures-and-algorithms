@@ -163,3 +163,66 @@ function Base.prepend!(list::AbstractLinkedList, collections...)
     return list
 end
 # >> end insert to head <<
+
+# >> start insert to ith <<
+function Base.insert!(list::AbstractLinkedList, idx::Int, data)
+    if idx > list.len + 1
+        throw(BoundsError(list, idx))
+    elseif idx == 1 || isempty(list)
+        return pushfirst!(list, data)
+    elseif idx == list.len + 1
+        return push!(list, data)
+    elseif 2 <= idx <= list.len
+        current_node = get_node(list, idx - 1)
+        current_node.next = typeof(current_node)(data, current_node.next)
+        list.len += 1
+        return list
+    else
+        throw(BoundsError(list, idx))
+    end
+end
+# >> end insert to ith <<
+
+# TODO
+# >> start remove <<
+# >> end remove <<
+
+# >> start find <<
+# >> end find <<
+
+# >> start indexing interface <<
+# https://docs.julialang.org/en/v1/manual/interfaces/#Indexing
+@inline function Base.getindex(list::AbstractLinkedList, idx::Int)
+    @boundscheck 0 < idx <= list.len || throw(BoundsError(list, idx))
+    node = @inbounds get_node(list, idx)
+    return node.data
+end
+
+function Base.setindex!(list::AbstractLinkedList{T}, data, idx::Int) where T
+    @boundscheck 0 < idx <= list.len || throw(BoundsError(list, idx))
+    node = @inbounds get_node(list, idx)
+    node.data = convert(T, data)
+    return list
+end
+
+function Base.firstindex(list::AbstractLinkedList)
+    isempty(list) && throw(BoundsError(list))
+    return 1
+end
+
+function Base.lastindex(list::AbstractLinkedList)
+    isempty(list) && throw(BoundsError(list))
+    return length(list)
+end
+# >> end indexing interface <<
+
+# >> start helper function <<
+function get_node(list::AbstractLinkedList, idx::Int)
+    @boundscheck 0 < idx <= list.len || throw(BoundsError(list, idx))
+    node = list.head
+    for _ in 2:idx
+        node = node.next
+    end
+    return node
+end
+# >> end helper function <<
