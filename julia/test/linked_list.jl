@@ -1,4 +1,4 @@
-@testset "Singly Linked Node" begin
+@testset "Singly List Node" begin
     node = SinglyListNode{Int}()
     @test typeof(node.data) == Int
     @test node.next == node
@@ -22,13 +22,16 @@ end
 @testset "Singly Linked List" begin
     # Construct
     @test_nowarn SinglyLinkedList{Int}()
+    @test SinglyLinkedList{Float64}().len == 0
+    @test_nowarn SinglyLinkedList{Int}(1)
     @test_nowarn SinglyLinkedList()
     @test SinglyLinkedList().len == 0
-    list = @test_nowarn SinglyLinkedList{Int}(1)
-    @test list.head == list.tail
-    @test list.head.data == list.tail.data == 1
 
     # Insert to tail
+    list = SinglyLinkedList{Int}()
+    @test length(push!(list, 1)) == 1
+    @test list.head == list.tail
+    @test list.head.data == list.tail.data == 1
     @test length(push!(list, 2)) == 2
     @test list.head != list.tail
     @test list.head.data == 1
