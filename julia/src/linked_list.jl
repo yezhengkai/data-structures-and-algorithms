@@ -183,11 +183,50 @@ function Base.insert!(list::AbstractLinkedList, idx::Int, data)
 end
 # >> end insert to ith <<
 
-# TODO
-# >> start remove <<
-# >> end remove <<
+# >> start delete tail <<
+function Base.pop!(list::SinglyLinkedList)
+    isempty(list) && throw(ArgumentError("List must be non-empty"))
+    data = list.tail.data
+    node_last_prev = @inbounds get_node(list, list.len - 1)
+    node_last_prev.next = node_last_prev.next.next
+    list.tail = node_last_prev
+    list.len -= 1
+    return data
+end
+# >> end delete tail <<
+
+# >> start delete head <<
+function Base.popfirst!(list::SinglyLinkedList)
+    isempty(list) && throw(ArgumentError("List must be non-empty"))
+    data = list.head.data
+    list.head = list.head.next
+    list.len -= 1
+    return data
+end
+# >> end delete head <<
+
+# >> start delete at ith <<
+function Base.deleteat!(list::AbstractLinkedList, idx::Int)
+    @boundscheck 0 < idx <= list.len || throw(BoundsError(list, idx))
+    node_prev = @inbounds get_node(list, idx - 1)
+    node_prev.next = node_prev.next.next
+    list.len -= 1
+    return list
+end
+# >> end delete at ith <<
 
 # >> start find <<
+function Base.findfirst(predicate::Function, list::AbstractLinkedList)
+    for (idx, data) in enumerate(list)
+        if predicate(data)
+            return idx
+        end
+    end
+    return nothing
+end
+function Base.findfirst(data::T, list::AbstractLinkedList{T}) where T
+    return findfirst(isequal(data), list)
+end
 # >> end find <<
 
 # >> start indexing interface <<
