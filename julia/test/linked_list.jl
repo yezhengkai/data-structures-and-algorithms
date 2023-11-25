@@ -71,5 +71,24 @@ end
     @test list.tail.data == 1
 
     # Insert to ith
-
+    @test_throws BoundsError insert!(SinglyLinkedList{Int}(), 2, 1)
+    @test insert!(SinglyLinkedList{Int}(), 1, 1) == SinglyLinkedList{Int64}(1)
+    @test insert!(SinglyLinkedList{Int}(), 0, 1) == SinglyLinkedList{Int64}(1)
+    @test insert!(SinglyLinkedList{Int}(), -1, 1) == SinglyLinkedList{Int64}(1)
+    list = SinglyLinkedList{Int64}()
+    @test length(insert!(list, 1, 1)) == 1  # [1]
+    @test list.head == list.tail
+    @test list.head.data == list.tail.data == 1
+    @test length(insert!(list, 2, 2)) == 2  # [1, 2]
+    @test list.head != list.tail
+    @test list.head.data == 1
+    @test list.tail.data == 2
+    @test length(insert!(list, 2, 3)) == 3  # [1, 3, 2]
+    @test list.head != list.tail
+    @test list.head.data == 1
+    @test list.head.next.data == 3
+    @test list.tail.data == 2
+    @test_throws BoundsError insert!(list, -1, 1)
+    @test_throws BoundsError insert!(list, 0, 1)
+    @test_throws BoundsError insert!(list, 5, 1)
 end
