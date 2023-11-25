@@ -111,6 +111,108 @@ end
 # TODO reverse order
 # >> end iteration interface <<
 
+# >> start indexing interface <<
+# https://docs.julialang.org/en/v1/manual/interfaces/#Indexing
+@inline function Base.getindex(list::AbstractLinkedList, idx::Int)
+    @boundscheck 0 < idx <= list.len || throw(BoundsError(list, idx))
+    node = @inbounds get_node(list, idx)
+    return node.data
+end
+
+function Base.setindex!(list::AbstractLinkedList{T}, data, idx::Int) where T
+    @boundscheck 0 < idx <= list.len || throw(BoundsError(list, idx))
+    node = @inbounds get_node(list, idx)
+    node.data = convert(T, data)
+    return list
+end
+
+function Base.firstindex(list::AbstractLinkedList)
+    isempty(list) && throw(BoundsError(list))
+    return 1
+end
+
+function Base.lastindex(list::AbstractLinkedList)
+    isempty(list) && throw(BoundsError(list))
+    return length(list)
+end
+
+function Base.first(list::AbstractLinkedList)
+    isempty(list) && throw(ArgumentError("List is empty"))
+    return list.head.data
+end
+
+function Base.last(list::AbstractLinkedList)
+    isempty(list) && throw(ArgumentError("List is empty"))
+    return list.tail.data
+end
+# >> end indexing interface <<
+
+# >> start general functions <<
+Base.:(==)(l1::AbstractLinkedList{T}, l2::AbstractLinkedList{S}) where {T,S} = false
+
+function Base.:(==)(l1::AbstractLinkedList{T}, l2::AbstractLinkedList{T}) where T
+    length(l1) == length(l2) || return false
+    for (i, j) in zip(l1, l2)
+        i == j || return false
+    end
+    return true
+end
+
+# Ref: https://discourse.julialang.org/t/extract-type-name-only-from-parametric-type/14188/20
+function Base.map(f::Base.Callable, list::AbstractLinkedList{T}) where T
+    if isempty(list) && f isa Function
+        # Core.Compiler.return_type(sqrt, Tuple{Int}) -> Float64
+        S = Core.Compiler.return_type(f, Tuple{T})
+        # Base.typename(Vector{Int}).wrapper -> Array
+        return Base.typename(typeof(list)).wrapper{S}()
+    elseif isempty(list) && f isa Type
+        return Base.typename(typeof(list)).wrapper{f}()
+    else
+        S = typeof(f(first(list)))
+        new_list = Base.typename(typeof(list)).wrapper{S}()
+        for data in list
+            new_data = f(data)
+            if new_data isa S
+                push!(new_list, new_data)
+            else
+                # typejoin(Int, Float64) -> Real
+                # typejoin(Int, Float64, ComplexF32) -> Number
+                R = typejoin(S, typeof(new_data))
+                new_list = Base.typename(typeof(list)).wrapper{R}(collect(new_list)...)
+                push!(new_list, new_data)
+            end
+        end
+        return new_list
+    end
+end
+
+function Base.filter(f::Function, list::AbstractLinkedList{T}) where T
+    new_list = typeof(list)()
+    for data in list
+        if f(data)
+            push!(new_list, data)
+        end
+    end
+    return new_list
+end
+
+function Base.reverse(list::AbstractLinkedList{T}) where T
+    new_list = typeof(list)()
+    for data in list
+        pushfirst!(new_list, data)
+    end
+    return new_list
+end
+
+function Base.copy(list::AbstractLinkedList{T}) where T
+    new_list = typeof(list)()
+    for data in list
+        push!(new_list, data)
+    end
+    return new_list
+end
+# >> end general functions <<
+
 # >> start insert to tail <<
 function Base.push!(list::SinglyLinkedList{T}, item) where {T}
     list.tail.next.data = item
@@ -228,32 +330,6 @@ function Base.findfirst(data::T, list::AbstractLinkedList{T}) where T
     return findfirst(isequal(data), list)
 end
 # >> end find <<
-
-# >> start indexing interface <<
-# https://docs.julialang.org/en/v1/manual/interfaces/#Indexing
-@inline function Base.getindex(list::AbstractLinkedList, idx::Int)
-    @boundscheck 0 < idx <= list.len || throw(BoundsError(list, idx))
-    node = @inbounds get_node(list, idx)
-    return node.data
-end
-
-function Base.setindex!(list::AbstractLinkedList{T}, data, idx::Int) where T
-    @boundscheck 0 < idx <= list.len || throw(BoundsError(list, idx))
-    node = @inbounds get_node(list, idx)
-    node.data = convert(T, data)
-    return list
-end
-
-function Base.firstindex(list::AbstractLinkedList)
-    isempty(list) && throw(BoundsError(list))
-    return 1
-end
-
-function Base.lastindex(list::AbstractLinkedList)
-    isempty(list) && throw(BoundsError(list))
-    return length(list)
-end
-# >> end indexing interface <<
 
 # >> start helper function <<
 function get_node(list::AbstractLinkedList, idx::Int)
