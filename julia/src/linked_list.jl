@@ -113,7 +113,7 @@ end
 
 # >> start indexing interface <<
 # https://docs.julialang.org/en/v1/manual/interfaces/#Indexing
-@inline function Base.getindex(list::AbstractLinkedList, idx::Int)
+function Base.getindex(list::AbstractLinkedList, idx::Int)
     @boundscheck 0 < idx <= list.len || throw(BoundsError(list, idx))
     node = @inbounds get_node(list, idx)
     return node.data
