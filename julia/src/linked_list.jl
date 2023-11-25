@@ -173,7 +173,7 @@ function Base.insert!(list::AbstractLinkedList, idx::Int, data)
     elseif idx == list.len + 1
         return push!(list, data)
     elseif 2 <= idx <= list.len
-        current_node = get_node(list, idx - 1)
+        current_node = @inbounds get_node(list, idx - 1)
         current_node.next = typeof(current_node)(data, current_node.next)
         list.len += 1
         return list
