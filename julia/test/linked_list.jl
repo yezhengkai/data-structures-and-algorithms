@@ -111,4 +111,9 @@ end
     @test_throws BoundsError deleteat!(SinglyLinkedList{Int}(), -1)
     @test_throws BoundsError deleteat!(SinglyLinkedList{Int}(), 0)
     @test deleteat!(list, 2) == SinglyLinkedList{Int}(2, 4)
+
+    # Find
+    @test findfirst(1, list) === nothing
+    @test findfirst(2, list) == 1
+    @test findfirst(isequal(4), list) == 2
 end
