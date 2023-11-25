@@ -91,4 +91,24 @@ end
     @test_throws BoundsError insert!(list, -1, 1)
     @test_throws BoundsError insert!(list, 0, 1)
     @test_throws BoundsError insert!(list, 5, 1)
+
+    # Delete tail
+    @test_throws ArgumentError pop!(SinglyLinkedList{Int}())
+    list = SinglyLinkedList{Int}(1, 2, 3, 4, 5)
+    @test pop!(list) == 5  # [1, 2, 3, 4]
+    @test length(list) == 4
+    @test list.head.data == 1
+    @test list.tail.data == 4
+
+    # Delete head
+    @test_throws ArgumentError popfirst!(SinglyLinkedList{Int}())
+    @test popfirst!(list) == 1  # [2, 3, 4]
+    @test length(list) == 3
+    @test list.head.data == 2
+    @test list.tail.data == 4
+
+    # Delete at ith
+    @test_throws BoundsError deleteat!(SinglyLinkedList{Int}(), -1)
+    @test_throws BoundsError deleteat!(SinglyLinkedList{Int}(), 0)
+    @test deleteat!(list, 2) == SinglyLinkedList{Int}(2, 4)
 end
