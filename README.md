@@ -1,6 +1,21 @@
 # Data Structures and Algorithms
 Use different programming languages ​​to implement data structures and algorithms as exercises.
 
+## Setup
+### Julia
+
+1. Install [Julia](https://julialang.org/) programming language.
+1. Run `julia --project=.` in `julia` directory to activate project.
+1. Run `] instantiate` to install dependencies and current project.
+
+### Python
+1. Install [Python](https://www.python.org/) programming language.
+1. Install [Poetry](https://python-poetry.org/) package manager
+1. Run `poetry install` in `python` directory to install dependencies and current project.
+
+<!-- ### Rust
+1. Install [Rust](https://www.rust-lang.org/) programming language. -->
+
 ## Test
 Run tests with `./runtests.sh LANGUAGE...`.
 For example:
