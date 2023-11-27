@@ -8,7 +8,9 @@ do
     julia --project=julia --startup-file=no  -e 'using Pkg; Pkg.test()'
   elif [ "${language}" == "py" ] || [ "${language}" == "python" ]; then
     echo "Run python tests"
-    echo "Not implemented"
+    pushd python || exit
+    poetry run pytest
+    popd || exit
   elif [ "${language}" == "rs" ] || [ "${language}" == "rust" ]; then
     echo "Run rust tests"
     echo "Not implemented"
