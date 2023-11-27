@@ -1,1 +1,10 @@
-__pycache__
+# Poetry
+.venv/
+dist/
+
+# pytest
+.pytest_cache/
+
+# Python
+__pycache__/
+*.py[cdo]
