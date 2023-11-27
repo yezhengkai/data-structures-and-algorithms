@@ -116,4 +116,12 @@ end
     @test findfirst(1, list) === nothing
     @test findfirst(2, list) == 1
     @test findfirst(isequal(4), list) == 2
+
+    # Get/set element through index
+    @test_nowarn list[2] = 100  # set
+    @test_throws BoundsError list[0] = 1 # set
+    @test_throws BoundsError list[10] = 1 # set
+    @test list[2] == 100  # get
+    @test_throws BoundsError list[3]  # get
+    @test_throws BoundsError list[10]  # get
 end
