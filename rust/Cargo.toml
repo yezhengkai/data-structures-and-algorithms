@@ -1,7 +1,9 @@
 [package]
-name = "data_structures_algorithms"
+name = "data-structures-algorithms"
 version = "0.1.0"
 edition = "2021"
+publish = false
+authors = ["Zheng-Kai Ye <supon3060@gmail.com> and contributors"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
