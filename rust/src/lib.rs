@@ -1,3 +1,7 @@
+// #[macro_use]
+// extern crate lazy_static;
+mod data_structures;
+
 pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
