@@ -14,6 +14,10 @@ def test_stack():
     stack.push(4)
     assert stack._data == [1, 2, 4]
 
+    assert stack.peek() == 4
+    assert stack.size() == 3
+    assert stack.is_empty() is False
+
 
 if __name__ == "__main__":
     test_stack()

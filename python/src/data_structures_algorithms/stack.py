@@ -8,8 +8,8 @@ T = TypeVar("T")
 
 
 class StackWithList(Generic[T]):
-    def __init__(self, *values):
-        self._data = []
+    def __init__(self, *values) -> None:
+        self._data: list[T] = []
         if values:
             self._data.extend(values)
 
@@ -18,6 +18,13 @@ class StackWithList(Generic[T]):
 
     def __str__(self) -> str:
         return self._data.__str__()
+    
+    def is_empty(self) -> bool:
+        return not bool(self._data)
+    
+    def size(self) -> int:
+        """Return the size of the stack."""
+        return len(self._data)
 
     def push(self, data: T) -> StackWithList:
         self._data.append(data)
@@ -25,3 +32,6 @@ class StackWithList(Generic[T]):
 
     def pop(self) -> T:
         return self._data.pop()
+    
+    def peek(self) -> T:
+        return self._data[-1]
