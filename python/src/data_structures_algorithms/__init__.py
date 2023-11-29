@@ -1,2 +1,1 @@
-from data_structures_algorithms.stack import *
-
+from data_structures_algorithms.stack import *  # noqa: F403
