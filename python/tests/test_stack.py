@@ -16,6 +16,7 @@ def test_stack():
 
     assert stack.peek() == 4
     assert stack.size() == 3
+    assert len(stack) == 3
     assert stack.is_empty() is False
 
 

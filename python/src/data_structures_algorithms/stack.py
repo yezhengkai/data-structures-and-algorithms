@@ -25,6 +25,9 @@ class StackWithList(Generic[T]):
     def size(self) -> int:
         """Return the size of the stack."""
         return len(self._data)
+    
+    def __len__(self) -> int:
+        return self.size()
 
     def push(self, data: T) -> StackWithList:
         self._data.append(data)
