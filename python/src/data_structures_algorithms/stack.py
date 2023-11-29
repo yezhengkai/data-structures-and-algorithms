@@ -13,13 +13,11 @@ class StackWithList(Generic[T]):
         if values:
             self._data.extend(values)
 
-    #TODO
     def __repr__(self) -> str:
-        return super().__repr__()
+        return self._data.__repr__()
 
-    #TODO
     def __str__(self) -> str:
-        return super().__str__()
+        return self._data.__str__()
 
     def push(self, data: T) -> StackWithList:
         self._data.append(data)
