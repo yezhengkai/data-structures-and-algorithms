@@ -62,7 +62,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.local  # the path depends on the OS
-          key: poetry-0  # increment to reset cache
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ matrix.poetry-version }}
       - name: Install poetry
         if: steps.cached-poetry-binary.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
@@ -79,7 +79,7 @@ jobs:
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: .venv
+          path: ./python/.venv
           key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
           # Restore cache with this prefix if not exact match with key
           # Note cache-hit returns false in this case, so the below step will run
