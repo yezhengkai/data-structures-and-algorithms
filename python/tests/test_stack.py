@@ -1,3 +1,4 @@
+import pytest
 from data_structures_algorithms import *  # noqa: F403
 
 
@@ -21,4 +22,4 @@ def test_stack():
 
 
 if __name__ == "__main__":
-    test_stack()
+    pytest.main([__file__])
