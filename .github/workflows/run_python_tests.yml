@@ -11,7 +11,7 @@ on:
     paths:
       - "./python/src/**"
       - "./python/tests/**"
-      - "./python/pyproject.toml"
+      - "./python/*.toml"  # pyproject.toml
   workflow_dispatch:
 
 jobs:
