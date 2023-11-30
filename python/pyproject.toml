@@ -2,7 +2,7 @@
 name = "data-structures-algorithms"
 version = "0.1.0"
 description = ""
-authors = ["Zheng-Kai Ye <supon3060@gmail.com> and contributors"]
+authors = ["Zheng-Kai Ye <supon3060@gmail.com>"]
 readme = "README.md"
 packages = [{include = "data_structures_algorithms", from = "src"}]
 
