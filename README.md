@@ -1,6 +1,11 @@
 # Data Structures and Algorithms
 Use different programming languages ​​to implement data structures and algorithms as exercises.
 
+| Language | Test |
+|:--------|:------:|
+|Python|[![Run python tests](https://github.com/yezhengkai/data-structures-and-algorithms/actions/workflows/run_python_tests.yml/badge.svg)](https://github.com/yezhengkai/data-structures-and-algorithms/actions/workflows/run_python_tests.yml)|
+|Rust|[![Run rust tests](https://github.com/yezhengkai/data-structures-and-algorithms/actions/workflows/run_rust_tests.yml/badge.svg)](https://github.com/yezhengkai/data-structures-and-algorithms/actions/workflows/run_rust_tests.yml)|
+
 ## Setup
 ### Julia
 1. Install [Julia](https://julialang.org/) programming language.
