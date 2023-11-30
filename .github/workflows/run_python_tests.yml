@@ -1,0 +1,103 @@
+# References:
+# - https://github.com/packetcoders/action-setup-cache-python-poetry/blob/main/action.yml
+# - https://github.com/snok/install-poetry
+# - https://github.com/abatilo/actions-poetry
+name: "Run python tests"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      ./python/src/*
+      ./python/tests/*
+      ./python/pyproject.toml
+  workflow_dispatch:
+
+jobs:
+  tests:  # job_id
+    # A map of default settings that will apply to all steps in the job. You can also set default settings for the entire workflow.
+    defaults:
+      run:
+        working-directory: ./python
+        shell: bash
+    # The name of the job displayed on GitHub. Available expression contexts: github, inputs, vars, needs, strategy, matrix
+    name: Python ${{ matrix.python-version }} - ${{ matrix.os }} - ${{ github.event_name }}
+    # Use runs-on to define the type of machine to run the job on.
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.11", "3.12"]
+        poetry-version: ["latest"]
+        os: [ubuntu-18.04, macos-latest, windows-latest]
+        # Ref: https://github.com/snok/install-poetry/issues/138
+        # include:
+        #   - VENV: .venv/bin/activate
+        #   - os: windows-latest
+        #     VENV: .venv/scripts/activate
+
+    steps:
+
+      #---------------------------
+      #      Check out repo
+      #---------------------------
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      #---------------------------
+      #      Set-up python
+      #---------------------------
+      - name: Setup python
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}  # see details (matrix, python-version, python-version-file, etc.)  # https://github.com/actions/setup-python
+
+      #----------------------------------------------
+      #      Install & configure poetry
+      #----------------------------------------------
+      - name: Load cached Poetry Binary
+        id: cached-poetry-binary
+        uses: actions/cache@v3
+        with:
+          path: ~/.local  # the path depends on the OS
+          key: poetry-0  # increment to reset cache
+      - name: Install poetry
+        if: steps.cached-poetry-binary.outputs.cache-hit != 'true'
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ matrix.poetry-version }}
+          # Setup a local virtual environment (if no poetry.toml file)
+          virtualenvs-create: true  # poetry config virtualenvs.create true --local
+          virtualenvs-in-project: true  # poetry config virtualenvs.in-project true --local
+      
+      #----------------------------------------------
+      #       Load cached venv if cache exists
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          # Restore cache with this prefix if not exact match with key
+          # Note cache-hit returns false in this case, so the below step will run
+          restore-keys: |
+            venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-
+
+      #----------------------------------------------------------
+      #       Install dependencies if cache does not exist
+      #----------------------------------------------------------
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+
+      #---------------------------------------------------
+      #       Install your root project, if required
+      #---------------------------------------------------
+      - name: Install library
+        run: poetry install --no-interaction
+
+      - name: Test with pytest
+        run: poetry run pytest -v
