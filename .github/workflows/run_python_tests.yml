@@ -30,7 +30,7 @@ jobs:
       matrix:
         python-version: ["3.11", "3.12"]
         poetry-version: ["latest"]
-        os: [ubuntu-18.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         # Ref: https://github.com/snok/install-poetry/issues/138
         # include:
         #   - VENV: .venv/bin/activate
