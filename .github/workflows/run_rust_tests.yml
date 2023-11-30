@@ -1,0 +1,54 @@
+# References:
+# - https://github.com/packetcoders/action-setup-cache-python-poetry/blob/main/action.yml
+# - https://github.com/snok/install-poetry
+# - https://github.com/abatilo/actions-poetry
+name: "Run rust tests"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "./rust/src/**"
+      - "./rust/tests/**"
+      - "./rust/*.toml"  # Cargo.toml
+  workflow_dispatch:
+
+jobs:
+  tests:  # job_id
+    # A map of default settings that will apply to all steps in the job. You can also set default settings for the entire workflow.
+    defaults:
+      run:
+        working-directory: ./rust
+        shell: bash
+    # The name of the job displayed on GitHub. Available expression contexts: github, inputs, vars, needs, strategy, matrix
+    name: Rust ${{ matrix.os }} - ${{ github.event_name }}
+    # Use runs-on to define the type of machine to run the job on.
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+        # include:
+        #   - target: x86_64-apple-darwin
+        #     os: macos-latest
+        #   - target: x86_64-unknown-linux-gnu
+        #     os: ubuntu-latest
+        #   - target: x86_64-pc-windows-msvc
+        #     os: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install latest nextest release
+        uses: taiki-e/install-action@nextest
+
+      - name: Test with latest nextest release
+        run: cargo nextest run

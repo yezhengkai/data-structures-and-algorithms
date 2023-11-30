@@ -26,7 +26,7 @@ jobs:
     # Use runs-on to define the type of machine to run the job on.
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         python-version: ["3.11", "3.12"]
         poetry-version: ["latest"]
