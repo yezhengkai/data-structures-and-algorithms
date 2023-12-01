@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 
-function run_julia_tests(){
+run_julia_tests() {
   julia --project=julia --startup-file=no  -e 'using Pkg; Pkg.test()'
 }
 
-function run_python_tests(){
+run_python_tests() {
   pushd python || exit
   poetry run pytest -v
   popd || exit
 }
 
-function run_rust_tests(){
+run_rust_tests() {
   pushd rust || exit
   cargo nextest run -v
   popd || exit
 }
 
-function run_all_tests() {
+run_all_tests() {
   run_julia_tests
   run_python_tests
   run_rust_tests
