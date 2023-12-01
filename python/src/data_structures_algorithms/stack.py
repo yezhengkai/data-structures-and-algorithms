@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import Generic, TypeVar
 
-__all__ = ["StackWithList"]
-
 T = TypeVar("T")
 
 
@@ -18,14 +16,14 @@ class StackWithList(Generic[T]):
 
     def __str__(self) -> str:
         return self._data.__str__()
-    
+
     def is_empty(self) -> bool:
         return not bool(self._data)
-    
+
     def size(self) -> int:
         """Return the size of the stack."""
         return len(self._data)
-    
+
     def __len__(self) -> int:
         return self.size()
 
@@ -35,6 +33,6 @@ class StackWithList(Generic[T]):
 
     def pop(self) -> T:
         return self._data.pop()
-    
+
     def peek(self) -> T:
         return self._data[-1]
