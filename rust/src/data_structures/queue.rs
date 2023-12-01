@@ -1,17 +1,17 @@
-pub struct ArrayQueue<T> {
+pub struct QueueWithVec<T> {
     array: Vec<T>,
     front_idx: i32,
     size: i32,
     capacity: i32
 }
 
-impl<T> Default for ArrayQueue<T> {
+impl<T> Default for QueueWithVec<T> {
     fn default() -> Self {
         Self::new(50)
     }
 }
 
-impl<T> ArrayQueue<T> {
+impl<T> QueueWithVec<T> {
     pub fn new(capacity: i32) -> Self {
         return Self {
             array: Vec::<T>::with_capacity(capacity as usize),
@@ -20,28 +20,28 @@ impl<T> ArrayQueue<T> {
             capacity,
         }
     }
-    fn capacity(&self) -> i32 {
+    pub fn capacity(&self) -> i32 {
         return self.capacity
     }
 
-    fn size(&self) -> i32 {
+    pub fn size(&self) -> i32 {
         return self.size
     }
 
-    fn is_empty(&self) -> bool {
+    pub fn is_empty(&self) -> bool {
         return self.size == 0
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::ArrayQueue;
+    use super::QueueWithVec;
 
     #[test]
     fn test_queue_construct() {
-        let queue: ArrayQueue<u8> = ArrayQueue::default();
+        let queue: QueueWithVec<u8> = QueueWithVec::default();
         assert!(queue.capacity() == 50);
-        let queue: ArrayQueue<i32> = ArrayQueue::default();
+        let queue: QueueWithVec<i32> = QueueWithVec::default();
         assert!(queue.capacity() == 50);
     }
 }

@@ -1,3 +1,3 @@
 mod queue;
 
-pub use self::queue::ArrayQueue;
+pub use self::queue::QueueWithVec;
