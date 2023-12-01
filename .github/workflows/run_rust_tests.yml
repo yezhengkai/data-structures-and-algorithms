@@ -1,7 +1,3 @@
-# References:
-# - https://github.com/packetcoders/action-setup-cache-python-poetry/blob/main/action.yml
-# - https://github.com/snok/install-poetry
-# - https://github.com/abatilo/actions-poetry
 name: "Run rust tests"
 
 on:

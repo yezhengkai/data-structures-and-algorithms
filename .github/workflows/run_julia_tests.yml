@@ -1,0 +1,61 @@
+name: "Run julia tests"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "./julia/src/**"
+      - "./julia/tests/**"
+      - "./julia/*.toml"  # Project.toml
+  workflow_dispatch:
+
+concurrency:
+  # Skip intermediate builds: always.
+  # Cancel intermediate builds: only if it is a pull request build.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+jobs:
+  tests:  # job_id
+    # A map of default settings that will apply to all steps in the job. You can also set default settings for the entire workflow.
+    defaults:
+      run:
+        working-directory: ./julia
+        shell: bash
+    # The name of the job displayed on GitHub. Available expression contexts: github, inputs, vars, needs, strategy, matrix
+    name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }} - ${{ github.event_name }}
+    # Use runs-on to define the type of machine to run the job on.
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - "1"  # Latest Release
+          - '1.9'
+          - 'nightly'
+        os:
+          - ubuntu-latest
+          - macOS-latest
+          - windows-latest
+        arch:
+          - x64
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Setup julia
+        uses: julia-actions/setup-julia@v1
+        with:
+          version: ${{ matrix.version }}
+          arch: ${{ matrix.arch }}
+
+      - name: Cache julia
+        uses: julia-actions/cache@v1
+
+      - name: Build julia package
+        uses: julia-actions/julia-buildpkg@v1
+      
+      - name: Test
+        uses: julia-actions/julia-runtest@v1
