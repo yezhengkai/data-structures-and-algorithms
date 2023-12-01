@@ -3,6 +3,7 @@ Use different programming languages ​​to implement data structures and algor
 
 | Language | Test |
 |:--------|:------:|
+|Julia|[![Run julia tests](https://github.com/yezhengkai/data-structures-and-algorithms/actions/workflows/run_julia_tests.yml/badge.svg)](https://github.com/yezhengkai/data-structures-and-algorithms/actions/workflows/run_julia_tests.yml)|
 |Python|[![Run python tests](https://github.com/yezhengkai/data-structures-and-algorithms/actions/workflows/run_python_tests.yml/badge.svg)](https://github.com/yezhengkai/data-structures-and-algorithms/actions/workflows/run_python_tests.yml)|
 |Rust|[![Run rust tests](https://github.com/yezhengkai/data-structures-and-algorithms/actions/workflows/run_rust_tests.yml/badge.svg)](https://github.com/yezhengkai/data-structures-and-algorithms/actions/workflows/run_rust_tests.yml)|
 
