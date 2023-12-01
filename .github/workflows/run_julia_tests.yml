@@ -18,7 +18,7 @@ concurrency:
 
 defaults:
   run:
-    working-directory: ./julia
+    # working-directory: ./julia
     shell: bash
 
 jobs:
@@ -56,6 +56,10 @@ jobs:
 
       - name: Build julia package
         uses: julia-actions/julia-buildpkg@v1
+        with:
+          project: julia
       
       - name: Test
         uses: julia-actions/julia-runtest@v1
+        with:
+          project: julia
