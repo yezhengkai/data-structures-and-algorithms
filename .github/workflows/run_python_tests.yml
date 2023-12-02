@@ -63,8 +63,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.local  # the path depends on the OS
-          key: poetry-cache-${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ join(matrix.*, '-')}}_${{ hashFiles('~/bin/poetry*') }}-${{ github.run_attempt }}
-          restore-keys: poetry-cache-${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ join(matrix.*, '-')}}
+          key: poetry-cache-${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ join(matrix.*, '-')}}
+      - name: Add Poetry Binary path
+        run: echo '~/.local/bin' >> $GITHUB_PATH
       - name: Install poetry
         if: steps.cached-poetry-binary.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
