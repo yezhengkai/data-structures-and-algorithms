@@ -5,7 +5,7 @@ from typing import Generic, TypeVar
 T = TypeVar("T")
 
 
-class StackWithList(Generic[T]):
+class StackUsingList(Generic[T]):
     def __init__(self, *values) -> None:
         self._data: list[T] = []
         if values:
@@ -27,7 +27,7 @@ class StackWithList(Generic[T]):
     def __len__(self) -> int:
         return self.size()
 
-    def push(self, data: T) -> StackWithList:
+    def push(self, data: T) -> StackUsingList:
         self._data.append(data)
         return self
 

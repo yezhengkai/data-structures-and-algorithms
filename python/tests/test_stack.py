@@ -1,15 +1,15 @@
 import pytest
-from data_structures_algorithms.stack import StackWithList
+from data_structures_algorithms import StackUsingList
 
 
 @pytest.fixture()
 def stack_with_list():
-    return StackWithList(1, 2, 3)
+    return StackUsingList(1, 2, 3)
 
 
 def test_construct():
-    assert StackWithList()._data == []
-    assert StackWithList(1, 2, 3)._data == [1, 2, 3]
+    assert StackUsingList()._data == []
+    assert StackUsingList(1, 2, 3)._data == [1, 2, 3]
 
 
 def test_str_repr(stack_with_list):
