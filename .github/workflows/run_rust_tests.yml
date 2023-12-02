@@ -5,9 +5,9 @@ on:
     branches:
       - main
     paths:
-      - "./rust/src/**"
-      - "./rust/tests/**"
-      - "./rust/*.toml"  # Cargo.toml
+      - "rust/src/**"
+      - "rust/tests/**"
+      - "rust/*.toml"  # Cargo.toml
   workflow_dispatch:
 
 jobs:

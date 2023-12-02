@@ -9,9 +9,9 @@ on:
     branches:
       - main
     paths:
-      - "./python/src/**"
-      - "./python/tests/**"
-      - "./python/*.toml"  # pyproject.toml
+      - "python/src/**"
+      - "python/tests/**"
+      - "python/*.toml"  # pyproject.toml
   workflow_dispatch:
 
 jobs:

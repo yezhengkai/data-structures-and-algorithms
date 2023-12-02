@@ -5,9 +5,9 @@ on:
     branches:
       - main
     paths:
-      - "./julia/src/**"
-      - "./julia/tests/**"
-      - "./julia/*.toml"  # Project.toml
+      - "julia/src/**"
+      - "julia/tests/**"
+      - "julia/*.toml"  # Project.toml
   workflow_dispatch:
 
 concurrency:
