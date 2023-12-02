@@ -57,12 +57,14 @@ jobs:
       #----------------------------------------------
       #      Install & configure poetry
       #----------------------------------------------
+      # Ref: https://github.com/julia-actions/cache/blob/main/action.yml
       - name: Load cached Poetry Binary
         id: cached-poetry-binary
         uses: actions/cache@v3
         with:
           path: ~/.local  # the path depends on the OS
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ matrix.poetry-version }}
+          key: poetry-cache-${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ join(matrix.*, '-')}}_${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: poetry-cache-${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ join(matrix.*, '-')}}
       - name: Install poetry
         if: steps.cached-poetry-binary.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
