@@ -29,77 +29,27 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.11", "3.12"]
-        poetry-version: ["latest"]
         os: [ubuntu-latest, macos-latest, windows-latest]
-        # Ref: https://github.com/snok/install-poetry/issues/138
-        # include:
-        #   - VENV: .venv/bin/activate
-        #   - os: windows-latest
-        #     VENV: .venv/scripts/activate
 
     steps:
-
-      #---------------------------
-      #      Check out repo
-      #---------------------------
       - name: Check out repository
         uses: actions/checkout@v3
 
-      #---------------------------
-      #      Set-up python
-      #---------------------------
+      - name: Install poetry
+        run: pipx install poetry
+
       - name: Setup python
         id: setup-python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}  # see details (matrix, python-version, python-version-file, etc.)  # https://github.com/actions/setup-python
+          cache: poetry
 
-      #----------------------------------------------
-      #      Install & configure poetry
-      #----------------------------------------------
-      # Ref: https://github.com/julia-actions/cache/blob/main/action.yml
-      - name: Load cached Poetry Binary
-        id: cached-poetry-binary
-        uses: actions/cache@v3
-        with:
-          path: ~/.local  # the path depends on the OS
-          key: poetry-cache-${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ join(matrix.*, '-')}}
-      - name: Add Poetry Binary path
-        run: echo '~/.local/bin' >> $GITHUB_PATH
-      - name: Install poetry
-        if: steps.cached-poetry-binary.outputs.cache-hit != 'true'
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ matrix.poetry-version }}
-          # Setup a local virtual environment (if no poetry.toml file)
-          virtualenvs-create: true  # poetry config virtualenvs.create true --local
-          virtualenvs-in-project: true  # poetry config virtualenvs.in-project true --local
-      
-      #----------------------------------------------
-      #       Load cached venv if cache exists
-      #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: ./python/.venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-          # Restore cache with this prefix if not exact match with key
-          # Note cache-hit returns false in this case, so the below step will run
-          restore-keys: |
-            venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-
-
-      #----------------------------------------------------------
-      #       Install dependencies if cache does not exist
-      #----------------------------------------------------------
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        if: steps.setup-python.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
-      #---------------------------------------------------
-      #       Install your root project, if required
-      #---------------------------------------------------
-      - name: Install library
+      - name: Install current project
         run: poetry install --no-interaction
 
       - name: Test with pytest
