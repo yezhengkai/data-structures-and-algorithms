@@ -38,7 +38,8 @@ impl<T> QueueWithVec<T> {
         };
     }
     pub fn capacity(&self) -> usize {
-        if size_of::<T>() == 0 { // equivalent to T::IS_ZST (need use `use core::mem::SizedTypeProperties;` or `use std::mem::SizedTypeProperties;`)
+        if size_of::<T>() == 0 {
+            // equivalent to T::IS_ZST (need use `use core::mem::SizedTypeProperties;` or `use std::mem::SizedTypeProperties;`)
             usize::MAX
         } else {
             self.array.capacity()
@@ -52,7 +53,6 @@ impl<T> QueueWithVec<T> {
     pub fn is_empty(&self) -> bool {
         return self.len == 0;
     }
-
 
     fn is_full(&self) -> bool {
         self.len == self.capacity()
