@@ -9,9 +9,9 @@ def stack_using_list():
 
 
 def test_construct():
-    assert StackUsingList().list_data == []
-    assert StackUsingList(1, 2, 3).list_data == [1, 2, 3]
-    assert StackUsingList(1, 2, max_size=5).list_data == [1, 2]
+    assert StackUsingList().to_list() == []
+    assert StackUsingList(1, 2, 3).to_list() == [1, 2, 3]
+    assert StackUsingList(1, 2, max_size=5).to_list() == [1, 2]
     with pytest.raises(StackOverflowError):
         StackUsingList(1, 2, max_size=1)
 
@@ -29,7 +29,7 @@ def test_pop_push(stack_using_list):
         stack_using_list.pop()
 
     stack_using_list.push(1)
-    assert stack_using_list.list_data == [1]
+    assert stack_using_list.to_list() == [1]
     with pytest.raises(StackUnderflowError):
         stack_using_list.pop()
         stack_using_list.pop()

@@ -55,3 +55,6 @@ class StackUsingList(Generic[T]):
 
     def peek(self) -> T:
         return self.list_data[-1]
+
+    def to_list(self) -> list[T]:
+        return self.list_data
