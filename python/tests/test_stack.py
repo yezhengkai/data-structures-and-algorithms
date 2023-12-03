@@ -1,6 +1,9 @@
 import pytest
 from data_structures_algorithms import StackUsingList
-from data_structures_algorithms.data_structures import StackOverflowError, StackUnderflowError
+from data_structures_algorithms.data_structures import (
+    StackOverflowError,
+    StackUnderflowError,
+)
 
 
 @pytest.fixture()
@@ -14,6 +17,7 @@ def test_construct():
     assert StackUsingList(1, 2, max_size=5).to_list() == [1, 2]
     with pytest.raises(StackOverflowError):
         StackUsingList(1, 2, max_size=1)
+    assert StackUsingList([1], [2]).to_list() == [[1], [2]]
 
 
 def test_str_repr(stack_using_list):
@@ -34,7 +38,6 @@ def test_pop_push(stack_using_list):
         stack_using_list.pop()
         stack_using_list.pop()
         stack_using_list.pop()
-    
 
 
 def test_size(stack_using_list):

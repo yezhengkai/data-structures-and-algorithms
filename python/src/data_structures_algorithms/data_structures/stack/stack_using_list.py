@@ -8,7 +8,7 @@ T = TypeVar("T")
 
 
 class StackUsingList(Generic[T]):
-    def __init__(self, *data, max_size: int = 10) -> None:
+    def __init__(self, *data: T, max_size: int = 10) -> None:
         self.list_data: list[T] = []
         self.max_size = max_size
         if data:
