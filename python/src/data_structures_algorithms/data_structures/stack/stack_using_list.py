@@ -39,6 +39,8 @@ class StackUsingList(Generic[T]):
     def push(self, data: T) -> StackUsingList:
         """
         Push an element to the top of the stack.
+        If the stack exceeds `max_size`, raise `StackOverflowError`
+        Time complexity: O(1)
         """
         if len(self.list_data) >= self.max_size:
             raise StackOverflowError
@@ -48,12 +50,21 @@ class StackUsingList(Generic[T]):
     def pop(self) -> T:
         """
         Pop an element off of the top of the stack.
+        If the stack is empty, raise `StackUnderflowError`
+        Time complexity: O(1)
         """
         if not self.list_data:
             raise StackUnderflowError
         return self.list_data.pop()
 
     def peek(self) -> T:
+        """
+        Peek at the top-most element of the stack.
+        If the stack is empty, raise `StackUnderflowError`
+        Time complexity: O(1)
+        """
+        if not self.list_data:
+            raise StackUnderflowError
         return self.list_data[-1]
 
     def to_list(self) -> list[T]:
