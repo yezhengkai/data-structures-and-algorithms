@@ -7,20 +7,6 @@ pub struct QueueWithVec<T> {
     capacity: usize,
 }
 
-// TODO: refer to https://doc.rust-lang.org/src/alloc/collections/vec_deque/mod.rs.html#108-120
-// impl<T: Clone> Clone for QueueWithVec<T> {
-//     fn clone(&self) -> Self {
-//         let mut queue = Self::with_capacity_in(self.len());
-//         queue.extend(self.iter().cloned());
-//         queue
-//     }
-
-//     fn clone_from(&mut self, other: &Self) {
-//         self.clear();
-//         self.extend(other.iter().cloned());
-//     }
-// }
-
 impl<T> Default for QueueWithVec<T> {
     /// Creates an empty queue.
     fn default() -> Self {
