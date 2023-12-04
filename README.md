@@ -47,3 +47,6 @@ For example:
 
 ### Python
 - [GitHub: OmkarPathak/pygorithm](https://github.com/OmkarPathak/pygorithm)
+
+### Rust
+- [Rust Module std::collections](https://doc.rust-lang.org/std/collections/index.html)
