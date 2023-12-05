@@ -1,7 +1,10 @@
-from typing import Generic, Iterator, MutableMapping, TypeVar
+from typing import Callable, Generic, Iterator, MutableMapping, TypeVar
+
+from .utils import HASH_FUNCTIONS_MAP
 
 K = TypeVar("K")
 V = TypeVar("V")
+T = TypeVar("T", str, bool, int, float, tuple, object)
 
 
 class Pair(Generic[K, V]):
@@ -11,9 +14,12 @@ class Pair(Generic[K, V]):
 
 
 class HashMap(MutableMapping[K, V], Generic[K, V]):
-    def __init__(self, initial_capacity=10, hash_func=hash) -> None:
+    def __init__(self, initial_capacity=10, hash_func_name: str | None = None) -> None:
         self.buckets: list[Pair | None] = [None] * initial_capacity
-        self.hash_func = hash_func
+        self._set_hash_func(hash_func_name)
+
+    def _set_hash_func(self, func_name: str | None) -> Callable[[T], int]:
+        self.hash_func = HASH_FUNCTIONS_MAP.get(func_name, hash)
 
     def __setitem__(self, key: K, value: V) -> None:
         idx: int = self._get_bucket_idx(key)
