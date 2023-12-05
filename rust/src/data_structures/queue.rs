@@ -4,6 +4,8 @@ pub struct QueueWithVec<T> {
     array: Vec<T>,
     head: usize,
     len: usize,
+    // `usize`: The pointer-sized unsigned integer type.
+    // The size of this primitive is how many bytes it takes to reference any location in memory. For example, on a 32 bit target, this is 4 bytes and on a 64 bit target, this is 8 bytes.
     capacity: usize,
 }
 
@@ -47,16 +49,31 @@ impl<T> QueueWithVec<T> {
     fn grow(&mut self) {
         debug_assert!(self.is_full());
         let old_cap = self.capacity();
-        // self.array.reserve_for_push(old_cap);
         self.array.reserve(old_cap);
         debug_assert!(!self.is_full());
     }
+
+    /// Appends an element to the back of the queue.
+    /// Time complexity: O(1)
     pub fn push(&mut self, value: T) {
+        // TODO: ref: https://stackoverflow.com/questions/71989694/create-an-empty-vector-of-size-n-and-not-fill-it-with-anything
         if self.is_full() {
             self.grow();
         }
+        // let rear = (self.head + self.len) % self.capacity;
+        // self.array[rear] = value;
         self.array.push(value);
         self.len += 1;
+    }
+
+    /// Accessing the first element in the queue
+    /// Time complexity: O(1)
+    pub fn peek(&self) -> Option<&T> {
+        if self.is_empty() {
+            None
+        } else {
+            Some(&self.array[self.head])
+        }
     }
 }
 
@@ -84,11 +101,13 @@ mod tests {
     }
 
     #[test]
-    fn push() {
+    fn push_pop_peek() {
         let mut queue: QueueWithVec<i64> = QueueWithVec::new(1);
+        assert_eq!(queue.peek(), None);
         queue.push(1);
         assert!(queue.capacity() == 1);
         queue.push(2);
         assert!(queue.capacity() >= 2);
+        assert_eq!(queue.peek(), Some(&1));
     }
 }
