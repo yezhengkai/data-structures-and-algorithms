@@ -18,6 +18,7 @@ def test_construct():
     with pytest.raises(StackOverflowError):
         StackUsingList(1, 2, max_size=1)
     assert StackUsingList([1], [2]).to_list() == [[1], [2]]
+    assert StackUsingList.from_iterable([1, 2]).to_list() == [1, 2]
 
 
 def test_str_repr(stack_using_list):

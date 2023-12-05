@@ -17,6 +17,10 @@ class StackUsingList(Generic[T]):
             else:
                 raise StackOverflowError
 
+    @classmethod
+    def from_iterable(cls, iterable: T, max_size: int = 10) -> StackUsingList:
+        return cls(*iterable, max_size=max_size)
+
     def __repr__(self) -> str:
         return self.list_data.__repr__()
 
