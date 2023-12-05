@@ -14,9 +14,10 @@
         "julialang.language-julia",
         // python
         "ms-python.python",
+        "charliermarsh.ruff",
         // rust
         "rust-lang.rust-analyzer",
         "serayuzgur.crates",
-        "charliermarsh.ruff",
+        "vadimcn.vscode-lldb",
     ]
 }
