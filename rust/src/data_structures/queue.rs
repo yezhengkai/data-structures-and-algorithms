@@ -7,20 +7,6 @@ pub struct QueueWithVec<T> {
     capacity: usize,
 }
 
-// TODO: refer to https://doc.rust-lang.org/src/alloc/collections/vec_deque/mod.rs.html#108-120
-// impl<T: Clone> Clone for QueueWithVec<T> {
-//     fn clone(&self) -> Self {
-//         let mut queue = Self::with_capacity_in(self.len());
-//         queue.extend(self.iter().cloned());
-//         queue
-//     }
-
-//     fn clone_from(&mut self, other: &Self) {
-//         self.clear();
-//         self.extend(other.iter().cloned());
-//     }
-// }
-
 impl<T> Default for QueueWithVec<T> {
     /// Creates an empty queue.
     fn default() -> Self {
@@ -37,6 +23,7 @@ impl<T> QueueWithVec<T> {
             capacity,
         };
     }
+
     pub fn capacity(&self) -> usize {
         if size_of::<T>() == 0 {
             // equivalent to T::IS_ZST (need use `use core::mem::SizedTypeProperties;` or `use std::mem::SizedTypeProperties;`)
@@ -56,6 +43,20 @@ impl<T> QueueWithVec<T> {
 
     fn is_full(&self) -> bool {
         self.len == self.capacity()
+    }
+    fn grow(&mut self) {
+        debug_assert!(self.is_full());
+        let old_cap = self.capacity();
+        // self.array.reserve_for_push(old_cap);
+        self.array.reserve(old_cap);
+        debug_assert!(!self.is_full());
+    }
+    pub fn push(&mut self, value: T) {
+        if self.is_full() {
+            self.grow();
+        }
+        self.array.push(value);
+        self.len += 1;
     }
 }
 
@@ -80,5 +81,14 @@ mod tests {
         assert!(queue.is_empty());
         assert!(!queue.is_full());
         assert!(queue.capacity() != 0)
+    }
+
+    #[test]
+    fn push() {
+        let mut queue: QueueWithVec<i64> = QueueWithVec::new(1);
+        queue.push(1);
+        assert!(queue.capacity() == 1);
+        queue.push(2);
+        assert!(queue.capacity() >= 2);
     }
 }
