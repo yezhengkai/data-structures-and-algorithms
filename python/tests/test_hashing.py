@@ -19,3 +19,6 @@ def test_simple_hash():
     hash_map = HashMap(hash_func_name="my_add_hash")
     with pytest.raises(TypeError):
         hash_map[1] = 1
+    hash_map = HashMap(hash_func_name="my_mul_hash")
+    with pytest.raises(TypeError):
+        hash_map[1] = 1

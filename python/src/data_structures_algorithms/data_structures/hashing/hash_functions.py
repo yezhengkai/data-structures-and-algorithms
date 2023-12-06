@@ -18,8 +18,18 @@ def register(func_name: str) -> Callable[P, int]:
 
 @register("my_add_hash")
 def add_hash(key: str) -> int:
+    # Using large prime numbers as modulus ensures that the hash values ​​are distributed as evenly as possible.
     hash_value = 0
-    modulus = 1000000007  # Using prime numbers will be more robust
+    modulus = 1000000007
     for c in key:
-        hash_value += ord(c)
+        hash_value += ord(c)  # Unicode code
+    return hash_value % modulus
+
+
+@register("my_mul_hash")
+def mul_hash(key: str) -> int:
+    hash_value = 0
+    modulus = 1000000007
+    for c in key:
+        hash_value = 31 * hash_value + ord(c)
     return hash_value % modulus
