@@ -1,8 +1,9 @@
-from typing import Callable, ParamSpec
+from typing import Callable, ParamSpec, TypeVar
 
 P = ParamSpec("P")
-
-HASH_FUNCTIONS_MAP = {"stdlib": hash}
+H = TypeVar("H", str, bool, int, float, tuple, object)
+HASH_FUNCTIONS_MAP: dict[str, Callable[[H], int]] = {"stdlib": hash}
+HASH_FUNCTION_TYPE = Callable[[H], int]
 
 
 def register(func_name: str) -> Callable[P, int]:
